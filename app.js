@@ -1,8 +1,7 @@
 /*
-Until recently I'd only ever used Node. 
-I decided to take a deeper look at what node can do and a lot of
-this code is from (or modified from) https://www.udemy.com/nodejs-the-complete-guide/
-The comments are my own. 
+Until I recently took a job that involves some work maintaining and rewirint legacy apps,
+I'd only ever worked with Node and ES6+ syntax. I'm following a Node course to gain a deeper understanding
+of what Node can do and, of course, how it does what it does. Most of this code isn't mine!
 */
 
 //Node doesn't support import by default. Need Babel for that. 
@@ -22,6 +21,16 @@ const server = http.createServer((req, res) => {
   }
   //The POST is created above as is the URL with the form action. 
   if (url === '/message' && method === 'POST') {
+      const body = [];
+    // Data Event listener
+    res.on('data', (chunk) => {
+        console.log(chunk)
+        body.push(chunk);
+    });
+    req.on('end', () => {
+        const parsebody = Buffer.concat(body).toString();
+        console.log(parsebody)
+    })
     fs.writeFileSync('message.txt', 'DUMMY');
     //Redirection status code
     res.statusCode = 302;
